@@ -11,6 +11,9 @@
 		4F6F875D2610B44A00B9A4FB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6F875C2610B44A00B9A4FB /* ViewController.swift */; };
 		4F6F875F2610B44B00B9A4FB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F6F875E2610B44B00B9A4FB /* Assets.xcassets */; };
 		4F6F87622610B44B00B9A4FB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F6F87602610B44B00B9A4FB /* Main.storyboard */; };
+		4F6F876D2610B56400B9A4FB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F6F876C2610B56400B9A4FB /* Foundation.framework */; };
+		4F6F876F2610B56C00B9A4FB /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F6F876E2610B56C00B9A4FB /* IOKit.framework */; };
+		4F89F3F026117D1C00C05CAD /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F89F3EF26117D1C00C05CAD /* icon.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,6 +24,9 @@
 		4F6F87612610B44B00B9A4FB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4F6F87632610B44B00B9A4FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4F6F87642610B44B00B9A4FB /* LowBatteryAlert2.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LowBatteryAlert2.entitlements; sourceTree = "<group>"; };
+		4F6F876C2610B56400B9A4FB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		4F6F876E2610B56C00B9A4FB /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		4F89F3EF26117D1C00C05CAD /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -28,6 +34,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F6F876D2610B56400B9A4FB /* Foundation.framework in Frameworks */,
+				4F6F876F2610B56C00B9A4FB /* IOKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -39,6 +47,7 @@
 			children = (
 				4F6F87592610B44A00B9A4FB /* LowBatteryAlert2 */,
 				4F6F87582610B44A00B9A4FB /* Products */,
+				4F6F876B2610B56400B9A4FB /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -53,6 +62,7 @@
 		4F6F87592610B44A00B9A4FB /* LowBatteryAlert2 */ = {
 			isa = PBXGroup;
 			children = (
+				4F89F3EF26117D1C00C05CAD /* icon.png */,
 				4F6F875A2610B44A00B9A4FB /* AppDelegate.swift */,
 				4F6F875C2610B44A00B9A4FB /* ViewController.swift */,
 				4F6F875E2610B44B00B9A4FB /* Assets.xcassets */,
@@ -61,6 +71,15 @@
 				4F6F87642610B44B00B9A4FB /* LowBatteryAlert2.entitlements */,
 			);
 			path = LowBatteryAlert2;
+			sourceTree = "<group>";
+		};
+		4F6F876B2610B56400B9A4FB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4F6F876E2610B56C00B9A4FB /* IOKit.framework */,
+				4F6F876C2610B56400B9A4FB /* Foundation.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -122,6 +141,7 @@
 			files = (
 				4F6F875F2610B44B00B9A4FB /* Assets.xcassets in Resources */,
 				4F6F87622610B44B00B9A4FB /* Main.storyboard in Resources */,
+				4F89F3F026117D1C00C05CAD /* icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

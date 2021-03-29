@@ -6,6 +6,7 @@
 //
 
 import Cocoa
+import WebKit
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -85,23 +86,24 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         let mainView = NSView(frame: mainScreen.frame)
         mainView.wantsLayer = true
-        mainView.layer?.backgroundColor = NSColor.red.cgColor
+        mainView.layer?.backgroundColor = NSColor.black.cgColor
         mainWindow.contentView!.addSubview(mainView)
-        
+  
         let cell = NSTableCellView()
         cell.frame = mainScreen.frame
         let tf = NSTextField()
         tf.frame = cell.frame
         tf.backgroundColor = NSColor.clear
-        tf.textColor = NSColor.white
+        tf.textColor = NSColor.orange
         tf.focusRingType = .none
         tf.wantsLayer = true
         tf.layer?.borderColor = NSColor.clear.cgColor
         tf.layer?.borderWidth = 1
         tf.isBordered = false
         tf.isEditable = false
-        tf.font = NSFont.systemFont(ofSize: CGFloat(64))
-        tf.stringValue = "【警告】バッテリー残量低下"
+        tf.font = NSFont(name: "Hiragino Mincho ProN W6", size: CGFloat(64))
+        //tf.font = NSFont.systemFont(ofSize: 64, weight: NSFont.Weight.heavy)
+        tf.stringValue = "バッテリー残量低下"
         tf.alignment = .center
         let stringHeight: CGFloat = tf.attributedStringValue.size().height
         let frame = tf.frame
@@ -111,8 +113,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         tf.frame = titleRect
         cell.addSubview(tf)
         mainView.addSubview(cell)
-        
+
         doPolling()
+        //mainWindow.orderFrontRegardless()
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
