@@ -101,7 +101,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         tf.isBordered = false
         tf.isEditable = false
         tf.font = NSFont.systemFont(ofSize: CGFloat(64))
-        tf.stringValue = "【警告】バッテリー残量減少"
+        tf.stringValue = "【警告】バッテリー残量低下"
         tf.alignment = .center
         let stringHeight: CGFloat = tf.attributedStringValue.size().height
         let frame = tf.frame
