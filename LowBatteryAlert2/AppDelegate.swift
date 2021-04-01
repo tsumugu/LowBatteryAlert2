@@ -65,19 +65,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let menuForHTML = NSMenu()
         menuForHTMLItem.submenu = menuForHTML
         menu.addItem(menuForHTMLItem)
-          // HTMLを選択
-          let fileSelectItem = NSMenuItem()
-          fileSelectItem.title = "HTMLを選択"
-          fileSelectItem.action = #selector(AppDelegate.openFileSelectPanel(_:))
-          menuForHTML.addItem(fileSelectItem)
-          // HTMLを選択
+          // 警告画面をプレビュー
           let previewFileItem = NSMenuItem()
           previewFileItem.title = "警告画面をプレビュー"
           previewFileItem.action = #selector(AppDelegate.openAlertWindow(_:))
           menuForHTML.addItem(previewFileItem)
+          // HTMLを選択
+          let fileSelectItem = NSMenuItem()
+          fileSelectItem.title = "HTMLファイルを選択して警告画面に設定"
+          fileSelectItem.action = #selector(AppDelegate.openFileSelectPanel(_:))
+          menuForHTML.addItem(fileSelectItem)
           // 設定を初期化
           let settingsResetItem = NSMenuItem()
-          settingsResetItem.title = "設定を初期化"
+          settingsResetItem.title = "設定をリセット"
           settingsResetItem.action = #selector(AppDelegate.resetSettings(_:))
           menuForHTML.addItem(settingsResetItem)
         // 終了
@@ -99,10 +99,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     @objc func openFileSelectPanel(_ sender: Any) {
         let openPanel :NSOpenPanel = NSOpenPanel()
-        openPanel.canChooseFiles = true             // ファイル選択を許可する
-        openPanel.canChooseDirectories = false      // フォルダ選択は禁止する
-        openPanel.allowsMultipleSelection = true    // 複数選択を許可する
-        // jpg,png,gifのみ選択可能にする
+        openPanel.canChooseFiles = true
+        openPanel.canChooseDirectories = false
+        openPanel.allowsMultipleSelection = true
         openPanel.allowedFileTypes = ["html","htm"]
         openPanel.begin(completionHandler: { (num) -> Void in
             if num == NSApplication.ModalResponse.OK {
