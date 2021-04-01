@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4F6B2A032615525B008A7EBE /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6B2A022615525B008A7EBE /* Util.swift */; };
-		4F6B2A0A26156587008A7EBE /* TF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6B2A0926156587008A7EBE /* TF.swift */; };
 		4F6B2A0D26156826008A7EBE /* AlertWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6B2A0C26156826008A7EBE /* AlertWindow.swift */; };
 		4F6F875B2610B44A00B9A4FB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6F875A2610B44A00B9A4FB /* AppDelegate.swift */; };
 		4F6F875D2610B44A00B9A4FB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6F875C2610B44A00B9A4FB /* ViewController.swift */; };
@@ -17,11 +16,11 @@
 		4F6F876D2610B56400B9A4FB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F6F876C2610B56400B9A4FB /* Foundation.framework */; };
 		4F6F876F2610B56C00B9A4FB /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F6F876E2610B56C00B9A4FB /* IOKit.framework */; };
 		4F89F3F026117D1C00C05CAD /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F89F3EF26117D1C00C05CAD /* icon.png */; };
+		4FA0D45226156D7700633C51 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 4FA0D45126156D7700633C51 /* index.html */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		4F6B2A022615525B008A7EBE /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
-		4F6B2A0926156587008A7EBE /* TF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TF.swift; sourceTree = "<group>"; };
 		4F6B2A0C26156826008A7EBE /* AlertWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertWindow.swift; sourceTree = "<group>"; };
 		4F6F87572610B44A00B9A4FB /* LowBatteryAlert2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LowBatteryAlert2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F6F875A2610B44A00B9A4FB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -33,6 +32,7 @@
 		4F6F876C2610B56400B9A4FB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4F6F876E2610B56C00B9A4FB /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		4F89F3EF26117D1C00C05CAD /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		4FA0D45126156D7700633C51 /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,8 +76,8 @@
 				4F6F87632610B44B00B9A4FB /* Info.plist */,
 				4F6F87642610B44B00B9A4FB /* LowBatteryAlert2.entitlements */,
 				4F6B2A022615525B008A7EBE /* Util.swift */,
-				4F6B2A0926156587008A7EBE /* TF.swift */,
 				4F6B2A0C26156826008A7EBE /* AlertWindow.swift */,
+				4FA0D45126156D7700633C51 /* index.html */,
 			);
 			path = LowBatteryAlert2;
 			sourceTree = "<group>";
@@ -149,6 +149,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F6F875F2610B44B00B9A4FB /* Assets.xcassets in Resources */,
+				4FA0D45226156D7700633C51 /* index.html in Resources */,
 				4F6F87622610B44B00B9A4FB /* Main.storyboard in Resources */,
 				4F89F3F026117D1C00C05CAD /* icon.png in Resources */,
 			);
@@ -162,7 +163,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F6F875D2610B44A00B9A4FB /* ViewController.swift in Sources */,
-				4F6B2A0A26156587008A7EBE /* TF.swift in Sources */,
 				4F6B2A032615525B008A7EBE /* Util.swift in Sources */,
 				4F6F875B2610B44A00B9A4FB /* AppDelegate.swift in Sources */,
 				4F6B2A0D26156826008A7EBE /* AlertWindow.swift in Sources */,

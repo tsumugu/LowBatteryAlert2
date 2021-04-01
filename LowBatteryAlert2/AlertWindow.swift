@@ -7,11 +7,17 @@
 
 import Cocoa
 import Foundation
+import WebKit
 
 class AlertWindow {
-    class func view(mainScreen:NSScreen)->NSPanel {
+    class func view(mainScreen:NSScreen, isPreview: Bool)->NSPanel {
         var mainWindow = NSPanel()
-        mainWindow = NSPanel(contentRect: mainScreen.frame, styleMask: [.titled, .nonactivatingPanel], backing: .buffered, defer: true)
+        //プレビューモードだったら閉じるボタンを有効にする
+        if (isPreview) {
+            mainWindow = NSPanel(contentRect: mainScreen.frame, styleMask: [.titled, .nonactivatingPanel, .closable], backing: .buffered, defer: true)
+        } else {
+            mainWindow = NSPanel(contentRect: mainScreen.frame, styleMask: [.titled, .nonactivatingPanel], backing: .buffered, defer: true)
+        }
         mainWindow.level = .mainMenu
         var mainView = NSView()
         mainWindow.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
@@ -21,12 +27,24 @@ class AlertWindow {
         mainView.layer?.backgroundColor = NSColor.black.cgColor
         mainWindow.contentView!.addSubview(mainView)
         
+        let webView = WKWebView()
+        webView.frame = mainScreen.frame
+        mainView.addSubview(webView)
+        
         // 警告ウインドウの内容設定
-        let cell = NSTableCellView()
-        cell.frame = mainScreen.frame
-        let tf = TF.mainViewTf(cell: cell)
-        cell.addSubview(tf)
-        mainView.addSubview(cell)
+        var path: String? = Bundle.main.path(forResource: "index", ofType: "html")
+        
+        let userDefaults = UserDefaults.standard
+        if var userLocalHTMLFilePath = userDefaults.string(forKey: "filePath") {
+            userLocalHTMLFilePath = userLocalHTMLFilePath.replacingOccurrences(of: "file://", with: "")
+            if (FileManager.default.fileExists(atPath: userLocalHTMLFilePath)) {
+                path = userLocalHTMLFilePath
+            }
+        }
+        let localHTMLUrl = URL(fileURLWithPath: path!, isDirectory: false)
+        let request = URLRequest(url: localHTMLUrl)
+        webView.load(request)
+        
         return mainWindow
     }
 }

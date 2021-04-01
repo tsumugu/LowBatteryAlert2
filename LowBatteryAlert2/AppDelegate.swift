@@ -17,6 +17,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let batteryPercentItem = NSMenuItem()
     let chargeStatusItem = NSMenuItem()
     var mainWindow = NSPanel()
+    var previewWindow = NSPanel()
+    var fileSelectWindow = NSPanel()
     
     func doPolling() {
         let batteryState = Util.getBatteryState()
@@ -33,6 +35,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
+    func initWindows() {
+        let mainScreen = NSScreen.deepest!
+        mainWindow = AlertWindow.view(mainScreen: mainScreen, isPreview: false)
+        previewWindow = AlertWindow.view(mainScreen: mainScreen, isPreview: true)
+    }
+    
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // ツールバーの常駐設定
         if let button = statusItem.button {
@@ -45,22 +53,42 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         // メニューの設定
         statusItem.menu = menu
-          // 残量%
+        // 残量%
         batteryPercentItem.action = #selector(AppDelegate.void(_:))
         menu.addItem(batteryPercentItem)
-          // 充電状況
+        // 充電状況
         chargeStatusItem.action = #selector(AppDelegate.void(_:))
         menu.addItem(chargeStatusItem)
-          // 終了
+        //入れ子
+        let menuForHTMLItem = NSMenuItem()
+        menuForHTMLItem.title = "警告画面設定"
+        let menuForHTML = NSMenu()
+        menuForHTMLItem.submenu = menuForHTML
+        menu.addItem(menuForHTMLItem)
+          // HTMLを選択
+          let fileSelectItem = NSMenuItem()
+          fileSelectItem.title = "HTMLを選択"
+          fileSelectItem.action = #selector(AppDelegate.openFileSelectPanel(_:))
+          menuForHTML.addItem(fileSelectItem)
+          // HTMLを選択
+          let previewFileItem = NSMenuItem()
+          previewFileItem.title = "警告画面をプレビュー"
+          previewFileItem.action = #selector(AppDelegate.openAlertWindow(_:))
+          menuForHTML.addItem(previewFileItem)
+          // 設定を初期化
+          let settingsResetItem = NSMenuItem()
+          settingsResetItem.title = "設定を初期化"
+          settingsResetItem.action = #selector(AppDelegate.resetSettings(_:))
+          menuForHTML.addItem(settingsResetItem)
+        // 終了
         let quitItem = NSMenuItem()
         quitItem.title = "Quit"
         quitItem.action = #selector(AppDelegate.quit(_:))
         menu.addItem(quitItem)
         
         // 警告ウインドウの設定
-        let mainScreen = NSScreen.deepest!
-        mainWindow = AlertWindow.view(mainScreen: mainScreen)
-
+        self.initWindows()
+        
         doPolling()
         //mainWindow.orderFrontRegardless()
     }
@@ -69,9 +97,40 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Insert code here to tear down your application
     }
     
+    @objc func openFileSelectPanel(_ sender: Any) {
+        let openPanel :NSOpenPanel = NSOpenPanel()
+        openPanel.canChooseFiles = true             // ファイル選択を許可する
+        openPanel.canChooseDirectories = false      // フォルダ選択は禁止する
+        openPanel.allowsMultipleSelection = true    // 複数選択を許可する
+        // jpg,png,gifのみ選択可能にする
+        openPanel.allowedFileTypes = ["html","htm"]
+        openPanel.begin(completionHandler: { (num) -> Void in
+            if num == NSApplication.ModalResponse.OK {
+                for fileURL in openPanel.urls {
+                    // fileURLを保存する
+                    let userDefaults = UserDefaults.standard
+                    userDefaults.set(fileURL.absoluteString, forKey: "filePath")
+                    self.initWindows()
+                }
+            }
+       })
+    }
+    
+    @objc func openAlertWindow(_ sender: Any) {
+        previewWindow.orderFrontRegardless()
+    }
+    
+    @objc func resetSettings(_ sender: Any) {
+        let userDefaults = UserDefaults.standard
+        userDefaults.removeObject(forKey: "filePath")
+        self.initWindows()
+        
+    }
+    
     @objc func quit(_ sender: Any){
         NSApplication.shared.terminate(self)
     }
+    
     @objc func void(_ sender: Any){
        
     }
