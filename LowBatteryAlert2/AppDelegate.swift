@@ -58,24 +58,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(quitItem)
         
         // 警告ウインドウの設定
-        var mainScreen = NSScreen()
-        var mainView = NSView()
-        mainScreen = NSScreen.deepest!
-        mainWindow = NSPanel(contentRect: mainScreen.frame, styleMask: [.titled, .nonactivatingPanel], backing: .buffered, defer: true)
-        mainWindow.level = .mainMenu
-        mainWindow.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
-        mainWindow.center()
-        mainView = NSView(frame: mainScreen.frame)
-        mainView.wantsLayer = true
-        mainView.layer?.backgroundColor = NSColor.black.cgColor
-        mainWindow.contentView!.addSubview(mainView)
-        
-        // 警告ウインドウの内容設定
-        let cell = NSTableCellView()
-        cell.frame = mainScreen.frame
-        let tf = TF.mainViewTf(cell: cell)
-        cell.addSubview(tf)
-        mainView.addSubview(cell)
+        let mainScreen = NSScreen.deepest!
+        mainWindow = AlertWindow.view(mainScreen: mainScreen)
 
         doPolling()
         //mainWindow.orderFrontRegardless()
