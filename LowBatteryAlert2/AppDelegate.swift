@@ -13,84 +13,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     @IBOutlet weak var menu: NSMenu!
     
-    var debugCallCount:Int = 0
-
     let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     let batteryPercentItem = NSMenuItem()
     let chargeStatusItem = NSMenuItem()
-    let quitItem = NSMenuItem()
+    var mainWindow = NSPanel()
     
-    var mainWindow: NSPanel = NSPanel(contentRect: NSRect(x: 0, y: 0, width: 200, height: 200), styleMask: [.titled, .nonactivatingPanel], backing: .buffered, defer: true)
-    
-    func getBatteryState() -> [String?] {
-        let task = Process()
-        let pipe = Pipe()
-        task.launchPath = "/usr/bin/pmset"
-        task.arguments = ["-g", "batt"]
-        task.standardOutput = pipe
-        task.launch()
-        let data = pipe.fileHandleForReading.readDataToEndOfFile()
-        let output = NSString(data: data, encoding: String.Encoding.utf8.rawValue)! as String
-        let batteryArray = output.components(separatedBy: ";")
-        let source = output.components(separatedBy: "'")[1]
-        let state = batteryArray[1].trimmingCharacters(in: NSCharacterSet.whitespaces).capitalized
-        let percent = batteryArray[0].components(separatedBy: "\t")[1].replacingOccurrences(of: "%", with: "")
-        var remaining = batteryArray[2].components(separatedBy: " ")[1]
-        if (remaining == "(no" || remaining == "not") {
-            remaining = "Unknown"
-        }
-        return [source, state, percent, remaining]
-    }
-    
-    func checkLowPower(batteryPercent:Int!, chargeType: String!) {
-        if (batteryPercent <= 1 && chargeType == "Battery Power") {
-            mainWindow.orderFrontRegardless()
-        } else {
-            mainWindow.orderOut(self)
-        }
-    }
-    
-    func doPolling() {
-        let batteryState = getBatteryState()
-        batteryPercentItem.title = "バッテリー残量: "+batteryState[2]!+"%"
-        chargeStatusItem.title = "電源: "+batteryState[0]!
-        let batteryPercent:Int = Int(batteryState[2]!)!
-        self.checkLowPower(batteryPercent: batteryPercent, chargeType: batteryState[0]!)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.doPolling()
-        }
-    }
-    
-    func applicationDidFinishLaunching(_ aNotification: Notification) {
-        if let button = self.statusItem.button {
-          let size = NSMakeSize(22, 22)
-          let image = NSImage(named: "icon.png")
-          image?.size = size
-          button.image = image
-        }
-        self.statusItem.highlightMode = true
-        self.statusItem.menu = menu
-        batteryPercentItem.action = #selector(AppDelegate.void(_:))
-        menu.addItem(batteryPercentItem)
-        chargeStatusItem.action = #selector(AppDelegate.void(_:))
-        menu.addItem(chargeStatusItem)
-        quitItem.title = "Quit"
-        quitItem.action = #selector(AppDelegate.quit(_:))
-        menu.addItem(quitItem)
-        
-        let mainScreen:NSScreen = NSScreen.deepest!
-        mainWindow = NSPanel(contentRect: mainScreen.frame, styleMask: [.titled, .nonactivatingPanel], backing: .buffered, defer: true)
-        mainWindow.level = .mainMenu
-        mainWindow.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
-        mainWindow.center()
-        
-        let mainView = NSView(frame: mainScreen.frame)
-        mainView.wantsLayer = true
-        mainView.layer?.backgroundColor = NSColor.black.cgColor
-        mainWindow.contentView!.addSubview(mainView)
-  
-        let cell = NSTableCellView()
-        cell.frame = mainScreen.frame
+    func mainViewTf(cell:NSTableCellView)->NSTextField {
         let tf = NSTextField()
         tf.frame = cell.frame
         tf.backgroundColor = NSColor.clear
@@ -111,6 +39,70 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         titleRect.size.height = stringHeight + ( stringHeight - (tf.font!.ascender + tf.font!.descender ) )
         titleRect.origin.y = frame.size.height / 2  - tf.lastBaselineOffsetFromBottom - tf.font!.xHeight / 2
         tf.frame = titleRect
+        return tf
+    }
+    
+    func checkLowPower(batteryPercent:Int!, chargeType: String!) {
+        if (batteryPercent <= 1 && chargeType == "Battery Power") {
+            mainWindow.orderFrontRegardless()
+        } else {
+            mainWindow.orderOut(self)
+        }
+    }
+    
+    func doPolling() {
+        let batteryState = Util.getBatteryState()
+        batteryPercentItem.title = "バッテリー残量: "+batteryState[2]!+"%"
+        chargeStatusItem.title = "電源: "+batteryState[0]!
+        let batteryPercent:Int = Int(batteryState[2]!)!
+        self.checkLowPower(batteryPercent: batteryPercent, chargeType: batteryState[0]!)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.doPolling()
+        }
+    }
+    
+    func applicationDidFinishLaunching(_ aNotification: Notification) {
+        
+        // ツールバーの常駐設定
+        if let button = statusItem.button {
+          let size = NSMakeSize(22, 22)
+          let image = NSImage(named: "icon.png")
+          image?.size = size
+          button.image = image
+        }
+        statusItem.highlightMode = true
+        
+        // メニューの設定
+        statusItem.menu = menu
+          // 残量%
+        batteryPercentItem.action = #selector(AppDelegate.void(_:))
+        menu.addItem(batteryPercentItem)
+          // 充電状況
+        chargeStatusItem.action = #selector(AppDelegate.void(_:))
+        menu.addItem(chargeStatusItem)
+          // 終了
+        let quitItem = NSMenuItem()
+        quitItem.title = "Quit"
+        quitItem.action = #selector(AppDelegate.quit(_:))
+        menu.addItem(quitItem)
+        
+        // 警告ウインドウの設定
+        var mainScreen = NSScreen()
+        var mainView = NSView()
+        mainScreen = NSScreen.deepest!
+        mainWindow = NSPanel(contentRect: mainScreen.frame, styleMask: [.titled, .nonactivatingPanel], backing: .buffered, defer: true)
+        mainWindow.level = .mainMenu
+        mainWindow.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
+        mainWindow.center()
+        mainView = NSView(frame: mainScreen.frame)
+        mainView.wantsLayer = true
+        mainView.layer?.backgroundColor = NSColor.black.cgColor
+        mainWindow.contentView!.addSubview(mainView)
+        
+        // 警告ウインドウの内容設定
+        let cell = NSTableCellView()
+        cell.frame = mainScreen.frame
+        let tf = self.mainViewTf(cell: cell)
         cell.addSubview(tf)
         mainView.addSubview(cell)
 
