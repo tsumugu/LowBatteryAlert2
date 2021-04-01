@@ -18,51 +18,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let chargeStatusItem = NSMenuItem()
     var mainWindow = NSPanel()
     
-    func mainViewTf(cell:NSTableCellView)->NSTextField {
-        let tf = NSTextField()
-        tf.frame = cell.frame
-        tf.backgroundColor = NSColor.clear
-        tf.textColor = NSColor.orange
-        tf.focusRingType = .none
-        tf.wantsLayer = true
-        tf.layer?.borderColor = NSColor.clear.cgColor
-        tf.layer?.borderWidth = 1
-        tf.isBordered = false
-        tf.isEditable = false
-        tf.font = NSFont(name: "Hiragino Mincho ProN W6", size: CGFloat(64))
-        //tf.font = NSFont.systemFont(ofSize: 64, weight: NSFont.Weight.heavy)
-        tf.stringValue = "バッテリー残量低下"
-        tf.alignment = .center
-        let stringHeight: CGFloat = tf.attributedStringValue.size().height
-        let frame = tf.frame
-        var titleRect:  NSRect = tf.cell!.titleRect(forBounds: frame)
-        titleRect.size.height = stringHeight + ( stringHeight - (tf.font!.ascender + tf.font!.descender ) )
-        titleRect.origin.y = frame.size.height / 2  - tf.lastBaselineOffsetFromBottom - tf.font!.xHeight / 2
-        tf.frame = titleRect
-        return tf
-    }
-    
-    func checkLowPower(batteryPercent:Int!, chargeType: String!) {
-        if (batteryPercent <= 1 && chargeType == "Battery Power") {
-            mainWindow.orderFrontRegardless()
-        } else {
-            mainWindow.orderOut(self)
-        }
-    }
-    
     func doPolling() {
         let batteryState = Util.getBatteryState()
         batteryPercentItem.title = "バッテリー残量: "+batteryState[2]!+"%"
         chargeStatusItem.title = "電源: "+batteryState[0]!
         let batteryPercent:Int = Int(batteryState[2]!)!
-        self.checkLowPower(batteryPercent: batteryPercent, chargeType: batteryState[0]!)
+        if (Util.checkLowPower(batteryPercent: batteryPercent, chargeType: batteryState[0]!)) {
+            mainWindow.orderFrontRegardless()
+        } else {
+            mainWindow.orderOut(self)
+        }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.doPolling()
         }
     }
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        
         // ツールバーの常駐設定
         if let button = statusItem.button {
           let size = NSMakeSize(22, 22)
@@ -102,7 +73,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // 警告ウインドウの内容設定
         let cell = NSTableCellView()
         cell.frame = mainScreen.frame
-        let tf = self.mainViewTf(cell: cell)
+        let tf = TF.mainViewTf(cell: cell)
         cell.addSubview(tf)
         mainView.addSubview(cell)
 

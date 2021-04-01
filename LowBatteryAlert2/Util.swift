@@ -27,4 +27,8 @@ class Util {
         }
         return [source, state, percent, remaining]
     }
+    
+    class func checkLowPower(batteryPercent:Int!, chargeType: String!)->Bool {
+        return batteryPercent <= 1 && chargeType == "Battery Power"
+    }
 }
